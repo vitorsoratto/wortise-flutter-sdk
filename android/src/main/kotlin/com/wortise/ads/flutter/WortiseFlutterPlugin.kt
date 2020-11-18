@@ -1,8 +1,8 @@
-package com.wortise.ads.flutter_wortise
+package com.wortise.ads.flutter
 
 import android.content.Context
 import com.wortise.ads.WortiseSdk
-import com.wortise.ads.flutter_wortise.BannerAd.Companion.CHANNEL_BANNER
+import com.wortise.ads.flutter.BannerAd.Companion.CHANNEL_BANNER
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding

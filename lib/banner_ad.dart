@@ -3,8 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_wortise/ad_size.dart';
-import 'package:flutter_wortise/wortise_sdk.dart';
+
+import 'ad_size.dart';
+import 'wortise_sdk.dart';
 
 enum BannerAdEvent {
   CLICKED,

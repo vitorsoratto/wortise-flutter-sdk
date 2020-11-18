@@ -1,9 +1,9 @@
-package com.wortise.ads.flutter_wortise
+package com.wortise.ads.flutter
 
 import android.app.Activity
 import android.content.Context
 import com.wortise.ads.AdError
-import com.wortise.ads.flutter_wortise.WortiseFlutterPlugin.Companion.CHANNEL_MAIN
+import com.wortise.ads.flutter.WortiseFlutterPlugin.Companion.CHANNEL_MAIN
 import com.wortise.ads.interstitial.InterstitialAd
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware

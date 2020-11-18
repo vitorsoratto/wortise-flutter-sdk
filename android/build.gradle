@@ -1,4 +1,4 @@
-group 'com.wortise.ads.flutter_wortise'
+group 'com.wortise.ads.flutter'
 version '1.0.2'
 
 buildscript {

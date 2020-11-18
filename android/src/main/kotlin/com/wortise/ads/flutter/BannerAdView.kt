@@ -1,10 +1,10 @@
-package com.wortise.ads.flutter_wortise
+package com.wortise.ads.flutter
 
 import android.content.Context
 import com.wortise.ads.AdError
 import com.wortise.ads.AdSize
 import com.wortise.ads.banner.BannerAd
-import com.wortise.ads.flutter_wortise.BannerAd.Companion.CHANNEL_BANNER
+import com.wortise.ads.flutter.BannerAd.Companion.CHANNEL_BANNER
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView

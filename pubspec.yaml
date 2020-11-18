@@ -1,7 +1,6 @@
-name: flutter_wortise
+name: wortise
 description: Wortise Flutter plugin
 version: 1.0.2
-author: Wortise
 homepage: https://wortise.com
 
 environment:
@@ -20,5 +19,5 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.wortise.ads.flutter_wortise
+        package: com.wortise.ads.flutter
         pluginClass: WortiseFlutterPlugin

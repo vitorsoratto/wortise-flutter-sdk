@@ -1,7 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:flutter_wortise/wortise_sdk.dart';
+
+import 'wortise_sdk.dart';
 
 enum InterstitialAdEvent {
   CLICKED,

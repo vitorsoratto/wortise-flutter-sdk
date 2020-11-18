@@ -1,7 +1,7 @@
-package com.wortise.ads.flutter_wortise
+package com.wortise.ads.flutter
 
 import android.content.Context
-import com.wortise.ads.flutter_wortise.WortiseFlutterPlugin.Companion.CHANNEL_MAIN
+import com.wortise.ads.flutter.WortiseFlutterPlugin.Companion.CHANNEL_MAIN
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.StandardMessageCodec
 import io.flutter.plugin.platform.PlatformView
