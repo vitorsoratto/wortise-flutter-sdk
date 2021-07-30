@@ -95,6 +95,16 @@ class ConsentManager : ActivityAware, FlutterPlugin, MethodCallHandler {
         result.success(null)
     }
 
+    private fun set(call: MethodCall, result: Result) {
+        val value = call.argument<String>("value")
+
+        requireNotNull(value)
+
+        ConsentManager.setIabString(context, value)
+
+        result.success(null)
+    }
+
 
     companion object {
         const val CHANNEL_CONSENT = "${CHANNEL_MAIN}/consentManager"

@@ -46,4 +46,12 @@ class ConsentManager {
 
     await _channel.invokeMethod('set', values);
   }
+
+  static Future<void> setIabString(String value) async {
+    Map<String, dynamic> values = {
+      'value': value
+    };
+
+    await _channel.invokeMethod('setIabString', values);
+  }
 }
