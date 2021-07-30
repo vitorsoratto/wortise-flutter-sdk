@@ -11,7 +11,7 @@ import io.flutter.plugin.platform.PlatformView
 
 class BannerAdView(context: Context, viewId: Int, args: Map<*, *>, messenger: BinaryMessenger) : BannerAd.Listener, PlatformView {
 
-    private val adHeight = args["adSize"] as? Int ?: -1
+    private val adHeight = args["adHeight"] as? Int ?: -1
 
     private val adSize: AdSize
         get() = when {

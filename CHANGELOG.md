@@ -1,6 +1,7 @@
-## 1.1.0.1
+## 1.1.1
 
 * Added support for consent IAB string
+* Some improvements
 
 ## 1.1.0
 

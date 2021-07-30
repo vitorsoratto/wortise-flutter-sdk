@@ -60,6 +60,8 @@ class ConsentManager : ActivityAware, FlutterPlugin, MethodCallHandler {
 
             "set"            -> set(call, result)
 
+            "setIabString"   -> setIabString(call, result)
+
             else             -> result.notImplemented()
         }
     }
@@ -95,7 +97,7 @@ class ConsentManager : ActivityAware, FlutterPlugin, MethodCallHandler {
         result.success(null)
     }
 
-    private fun set(call: MethodCall, result: Result) {
+    private fun setIabString(call: MethodCall, result: Result) {
         val value = call.argument<String>("value")
 
         requireNotNull(value)

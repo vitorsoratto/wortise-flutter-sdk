@@ -32,7 +32,7 @@ class BannerAd extends StatefulWidget {
   const BannerAd({
     Key key,
     this.adUnitId,
-    this.adSize = AdSize.MATCH_VIEW,
+    this.adSize = AdSize.HEIGHT_50,
     this.autoRefreshTime = 0,
     this.listener,
     this.keepAlive = false,
