@@ -1,3 +1,7 @@
+## 1.1.0.1
+
+* Added support for consent IAB string
+
 ## 1.1.0
 
 * Wortise SDK updated to version 1.1.0
