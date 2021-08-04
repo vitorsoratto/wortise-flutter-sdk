@@ -18,6 +18,7 @@ class WortiseFlutterPlugin : ActivityAware, FlutterPlugin, MethodCallHandler {
 
     private val plugins = listOf<FlutterPlugin>(
             ConsentManager(),
+            DataManager   (),
             InterstitialAd()
     )
 
