@@ -1,3 +1,7 @@
+## 1.1.3
+
+* Added support rewarded ads
+
 ## 1.1.1
 
 * Added support for consent IAB string
