@@ -1,12 +1,12 @@
 group 'com.wortise.ads.flutter'
-version '1.2.1'
+version '1.2.3'
 
 buildscript {
-    ext.kotlin_version = '1.4.21'
+    ext.kotlin_version = '1.5.30'
 
     repositories {
         google()
-        jcenter()
+        gradlePluginPortal()
     }
 
     dependencies {
@@ -18,7 +18,7 @@ buildscript {
 rootProject.allprojects {
     repositories {
         google()
-        jcenter()
+        gradlePluginPortal()
         maven { url 'https://maven.wortise.com/artifactory/public' }
     }
 }
@@ -27,7 +27,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     defaultConfig {
         minSdkVersion 16
@@ -43,6 +43,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.wortise:android-sdk:1.2.1'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.wortise:android-sdk:1.2.3'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }

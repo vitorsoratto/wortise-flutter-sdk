@@ -1,3 +1,9 @@
+## 1.2.3
+
+* Added support for Android 12
+* Fixed ProGuard issues
+* Various improvements
+
 ## 1.2.1
 
 * Various improvements and fixes
