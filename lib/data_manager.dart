@@ -13,7 +13,7 @@ class DataManager {
   static const MethodChannel _channel = const MethodChannel(CHANNEL_DATA_MANAGER);
 
 
-  static Future<int> get age async {
+  static Future<int?> get age async {
     return await _channel.invokeMethod('getAge');
   }
 
@@ -23,7 +23,7 @@ class DataManager {
     return list.cast<String>();
   }
 
-  static Future<UserGender> get gender async {
+  static Future<UserGender?> get gender async {
     String gender = await _channel.invokeMethod('getGender');
 
     if (gender == null) {
@@ -57,7 +57,7 @@ class DataManager {
     await _channel.invokeMethod('setAge', values);
   }
 
-  static Future<void> setEmails(List<String> list) async {
+  static Future<void> setEmails(List<String>? list) async {
     Map<String, dynamic> values = {
       'list': list
     };
@@ -65,8 +65,8 @@ class DataManager {
     await _channel.invokeMethod('setEmails', values);
   }
 
-  static Future<void> setGender(UserGender gender) async {
-    String name = (gender != null) ? describeEnum(gender) : null;
+  static Future<void> setGender(UserGender? gender) async {
+    String? name = (gender != null) ? describeEnum(gender) : null;
 
     Map<String, dynamic> values = {
       'gender': name

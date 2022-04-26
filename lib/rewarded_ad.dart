@@ -20,11 +20,11 @@ class RewardedAd {
   static const MethodChannel _channel = const MethodChannel(CHANNEL_REWARDED);
 
 
-  MethodChannel _adChannel;
+  MethodChannel? _adChannel;
 
   final String adUnitId;
 
-  final void Function(RewardedAdEvent, dynamic) listener;
+  final void Function(RewardedAdEvent, dynamic)? listener;
 
   final bool reloadOnDismissed;
 
@@ -32,7 +32,7 @@ class RewardedAd {
   RewardedAd(this.adUnitId, this.listener, {this.reloadOnDismissed = false}) {
     if (listener != null) {
       _adChannel = MethodChannel('${CHANNEL_REWARDED}_$adUnitId');
-      _adChannel.setMethodCallHandler(_handleEvent);
+      _adChannel?.setMethodCallHandler(_handleEvent);
     }
   }
 
@@ -73,22 +73,22 @@ class RewardedAd {
       'adUnitId': adUnitId
     };
 
-    await _channel.invokeMethod('showAd', values);
+    return await _channel.invokeMethod('showAd', values);
   }
 
 
   Future<dynamic> _handleEvent(MethodCall call) {
     switch (call.method) {
     case "clicked":
-      listener(RewardedAdEvent.CLICKED, call.arguments);
+      listener?.call(RewardedAdEvent.CLICKED, call.arguments);
       break;
 
     case "completed":
-      listener(RewardedAdEvent.COMPLETED, call.arguments);
+      listener?.call(RewardedAdEvent.COMPLETED, call.arguments);
       break;
 
     case "dismissed":
-      listener(RewardedAdEvent.DISMISSED, call.arguments);
+      listener?.call(RewardedAdEvent.DISMISSED, call.arguments);
 
       if (reloadOnDismissed) {
         loadAd();
@@ -97,15 +97,15 @@ class RewardedAd {
       break;
 
     case "failed":
-      listener(RewardedAdEvent.FAILED, call.arguments);
+      listener?.call(RewardedAdEvent.FAILED, call.arguments);
       break;
 
     case "loaded":
-      listener(RewardedAdEvent.LOADED, call.arguments);
+      listener?.call(RewardedAdEvent.LOADED, call.arguments);
       break;
 
     case "shown":
-      listener(RewardedAdEvent.SHOWN, call.arguments);
+      listener?.call(RewardedAdEvent.SHOWN, call.arguments);
       break;
     }
 

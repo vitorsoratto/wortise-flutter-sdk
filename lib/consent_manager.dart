@@ -15,7 +15,7 @@ class ConsentManager {
     return await _channel.invokeMethod('canCollectData');
   }
 
-  static Future<bool> get isGranted async {
+  static Future<bool?> get isGranted async {
     return await _channel.invokeMethod('isGranted');
   }
 
@@ -28,7 +28,7 @@ class ConsentManager {
       'withOptOut': withOptOut
     };
 
-    await _channel.invokeMethod('request', values);
+    return await _channel.invokeMethod('request', values);
   }
 
   static Future<bool> requestOnce({bool withOptOut = false}) async {
@@ -36,7 +36,7 @@ class ConsentManager {
       'withOptOut': withOptOut
     };
 
-    await _channel.invokeMethod('requestOnce', values);
+    return await _channel.invokeMethod('requestOnce', values);
   }
 
   static Future<void> set(bool granted) async {

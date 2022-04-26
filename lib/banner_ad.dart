@@ -26,12 +26,12 @@ class BannerAd extends StatefulWidget {
 
   final bool keepAlive;
 
-  final void Function(BannerAdEvent, dynamic) listener;
+  final void Function(BannerAdEvent, dynamic)? listener;
 
 
   const BannerAd({
-    Key key,
-    this.adUnitId,
+    Key? key,
+    required this.adUnitId,
     this.adSize = AdSize.HEIGHT_50,
     this.autoRefreshTime = 0,
     this.listener,
@@ -50,7 +50,7 @@ class _BannerAdState extends State<BannerAd> with AutomaticKeepAliveClientMixin 
   @override
   Widget build(BuildContext context) {
     if (!Platform.isAndroid) {
-      return null;
+      return Container();
     }
 
     var params = <String, dynamic>{
@@ -102,6 +102,7 @@ class _BannerAdState extends State<BannerAd> with AutomaticKeepAliveClientMixin 
         });
 
         widget.listener?.call(BannerAdEvent.LOADED, call.arguments);
+        
         break;
       }
     });

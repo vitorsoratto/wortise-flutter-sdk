@@ -1,3 +1,9 @@
+## 1.2.3+1
+
+* Upgraded to Dart 2.12.0
+* Added support for sound null safety
+* Various improvements and fixes
+
 ## 1.2.3
 
 * Added support for Android 12

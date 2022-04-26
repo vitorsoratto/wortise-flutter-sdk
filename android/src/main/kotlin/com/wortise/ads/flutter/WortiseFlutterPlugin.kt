@@ -17,10 +17,10 @@ class WortiseFlutterPlugin : ActivityAware, FlutterPlugin, MethodCallHandler {
         get() = plugins.mapNotNull { it as? ActivityAware }
 
     private val plugins = listOf<FlutterPlugin>(
-            ConsentManager(),
-            DataManager   (),
-            InterstitialAd(),
-            RewardedAd    ()
+        ConsentManager(),
+        DataManager   (),
+        InterstitialAd(),
+        RewardedAd    ()
     )
 
 

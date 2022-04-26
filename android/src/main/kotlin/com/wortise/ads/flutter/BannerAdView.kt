@@ -66,8 +66,8 @@ class BannerAdView(context: Context, viewId: Int, args: Map<*, *>, messenger: Bi
 
     override fun onBannerLoaded(ad: BannerAd) {
         val values = mapOf(
-                "adHeight" to ad.adHeight,
-                "adWidth"  to ad.adWidth
+            "adHeight" to ad.adHeight,
+            "adWidth"  to ad.adWidth
         )
 
         channel.invokeMethod("loaded", values)

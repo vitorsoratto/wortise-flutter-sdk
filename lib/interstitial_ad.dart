@@ -19,11 +19,11 @@ class InterstitialAd {
   static const MethodChannel _channel = const MethodChannel(CHANNEL_INTERSTITIAL);
 
 
-  MethodChannel _adChannel;
+  MethodChannel? _adChannel;
 
   final String adUnitId;
 
-  final void Function(InterstitialAdEvent, dynamic) listener;
+  final void Function(InterstitialAdEvent, dynamic)? listener;
 
   final bool reloadOnDismissed;
 
@@ -31,7 +31,7 @@ class InterstitialAd {
   InterstitialAd(this.adUnitId, this.listener, {this.reloadOnDismissed = false}) {
     if (listener != null) {
       _adChannel = MethodChannel('${CHANNEL_INTERSTITIAL}_$adUnitId');
-      _adChannel.setMethodCallHandler(_handleEvent);
+      _adChannel?.setMethodCallHandler(_handleEvent);
     }
   }
 
@@ -72,18 +72,18 @@ class InterstitialAd {
       'adUnitId': adUnitId
     };
 
-    await _channel.invokeMethod('showAd', values);
+    return await _channel.invokeMethod('showAd', values);
   }
 
 
   Future<dynamic> _handleEvent(MethodCall call) {
     switch (call.method) {
     case "clicked":
-      listener(InterstitialAdEvent.CLICKED, call.arguments);
+      listener?.call(InterstitialAdEvent.CLICKED, call.arguments);
       break;
 
     case "dismissed":
-      listener(InterstitialAdEvent.DISMISSED, call.arguments);
+      listener?.call(InterstitialAdEvent.DISMISSED, call.arguments);
 
       if (reloadOnDismissed) {
         loadAd();
@@ -92,15 +92,15 @@ class InterstitialAd {
       break;
 
     case "failed":
-      listener(InterstitialAdEvent.FAILED, call.arguments);
+      listener?.call(InterstitialAdEvent.FAILED, call.arguments);
       break;
 
     case "loaded":
-      listener(InterstitialAdEvent.LOADED, call.arguments);
+      listener?.call(InterstitialAdEvent.LOADED, call.arguments);
       break;
 
     case "shown":
-      listener(InterstitialAdEvent.SHOWN, call.arguments);
+      listener?.call(InterstitialAdEvent.SHOWN, call.arguments);
       break;
     }
 
