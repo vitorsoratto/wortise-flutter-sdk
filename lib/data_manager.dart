@@ -7,11 +7,10 @@ import 'user_gender.dart';
 import 'wortise_sdk.dart';
 
 class DataManager {
-
   static const CHANNEL_DATA_MANAGER = "${WortiseSdk.CHANNEL_MAIN}/dataManager";
 
-  static const MethodChannel _channel = const MethodChannel(CHANNEL_DATA_MANAGER);
-
+  static const MethodChannel _channel =
+      const MethodChannel(CHANNEL_DATA_MANAGER);
 
   static Future<int?> get age async {
     return await _channel.invokeMethod('getAge');
@@ -24,7 +23,7 @@ class DataManager {
   }
 
   static Future<UserGender?> get gender async {
-    String gender = await _channel.invokeMethod('getGender');
+    String? gender = await _channel.invokeMethod('getGender');
 
     if (gender == null) {
       return null;
@@ -34,33 +33,25 @@ class DataManager {
   }
 
   static Future<void> addEmail(String email) async {
-    Map<String, dynamic> values = {
-      'email': email
-    };
+    Map<String, dynamic> values = {'email': email};
 
     await _channel.invokeMethod('addEmail', values);
   }
 
   static Future<bool> requestAccount(bool onlyIfNotAvailable) async {
-    Map<String, dynamic> values = {
-      'onlyIfNotAvailable': onlyIfNotAvailable
-    };
+    Map<String, dynamic> values = {'onlyIfNotAvailable': onlyIfNotAvailable};
 
     return await _channel.invokeMethod('requestAccount', values);
   }
 
   static Future<void> setAge(int age) async {
-    Map<String, dynamic> values = {
-      'age': age
-    };
+    Map<String, dynamic> values = {'age': age};
 
     await _channel.invokeMethod('setAge', values);
   }
 
   static Future<void> setEmails(List<String>? list) async {
-    Map<String, dynamic> values = {
-      'list': list
-    };
+    Map<String, dynamic> values = {'list': list};
 
     await _channel.invokeMethod('setEmails', values);
   }
@@ -68,9 +59,7 @@ class DataManager {
   static Future<void> setGender(UserGender? gender) async {
     String? name = (gender != null) ? describeEnum(gender) : null;
 
-    Map<String, dynamic> values = {
-      'gender': name
-    };
+    Map<String, dynamic> values = {'gender': name};
 
     await _channel.invokeMethod('setGender', values);
   }
