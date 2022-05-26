@@ -1,3 +1,9 @@
+## 1.3.0
+
+* Wortise SDK updated to version 1.3.0
+* Added support for Google Play Families Policy
+* Various improvements and fixes
+
 ## 1.2.3+1
 
 * Upgraded to Dart 2.12.0
