@@ -9,9 +9,12 @@ import io.flutter.plugin.platform.PlatformViewFactory
 
 class BannerAd(private val messenger: BinaryMessenger) : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
     
-    override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
-        return BannerAdView(context, viewId, args as Map<*, *>, messenger)
-    }
+    override fun create(context: Context?, viewId: Int, args: Any?): PlatformView = BannerAdView(
+        requireNotNull(context),
+        viewId,
+        requireNotNull(args as? Map<*, *>),
+        messenger
+    )
 
 
     companion object {
