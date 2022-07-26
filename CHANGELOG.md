@@ -1,3 +1,7 @@
+## 1.3.2+4
+
+* Added missing changes from the previous version
+
 ## 1.3.2+3
 
 * Wortise SDK updated to version 1.3.2.1
