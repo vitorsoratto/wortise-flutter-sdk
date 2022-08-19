@@ -1,4 +1,4 @@
-package com.wortise.ads.flutter
+package com.wortise.ads.flutter.banner
 
 import android.content.Context
 import com.wortise.ads.flutter.WortiseFlutterPlugin.Companion.CHANNEL_MAIN

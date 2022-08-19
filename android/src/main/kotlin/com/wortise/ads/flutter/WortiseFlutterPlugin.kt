@@ -2,7 +2,12 @@ package com.wortise.ads.flutter
 
 import android.content.Context
 import com.wortise.ads.WortiseSdk
-import com.wortise.ads.flutter.BannerAd.Companion.CHANNEL_BANNER
+import com.wortise.ads.flutter.AdWidget.Companion.CHANNEL_AD_WIDGET
+import com.wortise.ads.flutter.banner.BannerAd
+import com.wortise.ads.flutter.banner.BannerAd.Companion.CHANNEL_BANNER
+import com.wortise.ads.flutter.interstitial.InterstitialAd
+import com.wortise.ads.flutter.natives.GoogleNativeAdManager
+import com.wortise.ads.flutter.rewarded.RewardedAd
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -17,11 +22,12 @@ class WortiseFlutterPlugin : ActivityAware, FlutterPlugin, MethodCallHandler {
         get() = plugins.mapNotNull { it as? ActivityAware }
 
     private val plugins = listOf<FlutterPlugin>(
-        AdSettings    (),
-        ConsentManager(),
-        DataManager   (),
-        InterstitialAd(),
-        RewardedAd    ()
+        AdSettings           (),
+        ConsentManager       (),
+        DataManager          (),
+        GoogleNativeAdManager(),
+        InterstitialAd       (),
+        RewardedAd           ()
     )
 
 
@@ -41,6 +47,8 @@ class WortiseFlutterPlugin : ActivityAware, FlutterPlugin, MethodCallHandler {
         channel.setMethodCallHandler(this)
 
         plugins.forEach { it.onAttachedToEngine(binding) }
+
+        binding.platformViewRegistry.registerViewFactory(CHANNEL_AD_WIDGET, AdWidget(this))
 
         binding.platformViewRegistry.registerViewFactory(CHANNEL_BANNER, BannerAd(binding.binaryMessenger))
     }
@@ -91,9 +99,9 @@ class WortiseFlutterPlugin : ActivityAware, FlutterPlugin, MethodCallHandler {
 
         require(!assetKey.isNullOrEmpty())
 
-        WortiseSdk.initialize(context, assetKey, start)
-
-        result.success(null)
+        WortiseSdk.initialize(context, assetKey, start) {
+            result.success(null)
+        }
     }
 
     private fun start(result: Result) {
@@ -111,6 +119,12 @@ class WortiseFlutterPlugin : ActivityAware, FlutterPlugin, MethodCallHandler {
     private fun wait(result: Result) {
         WortiseSdk.wait { result.success(null) }
     }
+
+
+    fun getPlatformView(adUnitId: String) = plugins.asSequence()
+        .mapNotNull { it as? AdWithView }
+        .mapNotNull { it.getPlatformView(adUnitId) }
+        .firstOrNull()
 
 
     companion object {

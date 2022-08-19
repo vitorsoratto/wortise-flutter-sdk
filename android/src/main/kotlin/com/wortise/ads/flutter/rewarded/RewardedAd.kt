@@ -1,10 +1,11 @@
-package com.wortise.ads.flutter
+package com.wortise.ads.flutter.rewarded
 
 import android.app.Activity
 import android.content.Context
 import com.wortise.ads.AdError
 import com.wortise.ads.flutter.WortiseFlutterPlugin.Companion.CHANNEL_MAIN
-import com.wortise.ads.interstitial.InterstitialAd
+import com.wortise.ads.rewarded.RewardedAd
+import com.wortise.ads.rewarded.models.Reward
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -13,7 +14,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
-class InterstitialAd : ActivityAware, FlutterPlugin, MethodCallHandler {
+class RewardedAd : ActivityAware, FlutterPlugin, MethodCallHandler {
 
     private var activity: Activity? = null
 
@@ -23,7 +24,7 @@ class InterstitialAd : ActivityAware, FlutterPlugin, MethodCallHandler {
 
     private lateinit var context: Context
 
-    private val instances = mutableMapOf<String, InterstitialAd>()
+    private val instances = mutableMapOf<String, RewardedAd>()
 
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
@@ -35,7 +36,7 @@ class InterstitialAd : ActivityAware, FlutterPlugin, MethodCallHandler {
 
         context = binding.applicationContext
 
-        channel = MethodChannel(binding.binaryMessenger, CHANNEL_INTERSTITIAL)
+        channel = MethodChannel(binding.binaryMessenger, CHANNEL_REWARDED)
         channel.setMethodCallHandler(this)
     }
 
@@ -73,14 +74,14 @@ class InterstitialAd : ActivityAware, FlutterPlugin, MethodCallHandler {
     }
 
 
-    private fun createInstance(adUnitId: String): InterstitialAd {
+    private fun createInstance(adUnitId: String): RewardedAd {
         val activity = requireNotNull(activity)
 
-        val adChannel = MethodChannel(binding.binaryMessenger, "${CHANNEL_INTERSTITIAL}_$adUnitId")
+        val adChannel = MethodChannel(binding.binaryMessenger, "${CHANNEL_REWARDED}_$adUnitId")
 
-        return InterstitialAd(activity, adUnitId).also {
+        return RewardedAd(activity, adUnitId).also {
 
-            it.listener = InterstitialAdListener(adChannel)
+            it.listener = RewardedAdListener(adChannel)
 
             instances[adUnitId] = it
         }
@@ -117,9 +118,9 @@ class InterstitialAd : ActivityAware, FlutterPlugin, MethodCallHandler {
 
         requireNotNull(adUnitId)
 
-        val interstitialAd = instances[adUnitId] ?: createInstance(adUnitId)
+        val rewardedAd = instances[adUnitId] ?: createInstance(adUnitId)
 
-        interstitialAd.loadAd()
+        rewardedAd.loadAd()
 
         result.success(null)
     }
@@ -129,46 +130,56 @@ class InterstitialAd : ActivityAware, FlutterPlugin, MethodCallHandler {
 
         requireNotNull(adUnitId)
 
-        val interstitialAd = instances[adUnitId]
+        val rewardedAd = instances[adUnitId]
 
-        if (interstitialAd?.isAvailable != true) {
+        if (rewardedAd?.isAvailable != true) {
             result.success(false)
             return
         }
 
-        interstitialAd.showAd()
+        rewardedAd.showAd()
 
         result.success(true)
     }
 
 
-    private class InterstitialAdListener(private val channel: MethodChannel) : InterstitialAd.Listener {
+    private class RewardedAdListener(private val channel: MethodChannel) : RewardedAd.Listener {
 
-        override fun onInterstitialClicked(ad: InterstitialAd) {
+        override fun onRewardedClicked(ad: RewardedAd) {
             channel.invokeMethod("clicked", null)
         }
 
-        override fun onInterstitialDismissed(ad: InterstitialAd) {
+        override fun onRewardedCompleted(ad: RewardedAd, reward: Reward) {
+            val values = mapOf(
+                "amount"  to reward.amount,
+                "label"   to reward.label,
+                "success" to reward.success
+            )
+
+            channel.invokeMethod("completed", values)
+        }
+
+        override fun onRewardedDismissed(ad: RewardedAd) {
             channel.invokeMethod("dismissed", null)
         }
 
-        override fun onInterstitialFailed(ad: InterstitialAd, error: AdError) {
+        override fun onRewardedFailed(ad: RewardedAd, error: AdError) {
             val values = mapOf("error" to error.name)
 
             channel.invokeMethod("failed", values)
         }
 
-        override fun onInterstitialLoaded(ad: InterstitialAd) {
+        override fun onRewardedLoaded(ad: RewardedAd) {
             channel.invokeMethod("loaded", null)
         }
 
-        override fun onInterstitialShown(ad: InterstitialAd) {
+        override fun onRewardedShown(ad: RewardedAd) {
             channel.invokeMethod("shown", null)
         }
     }
 
 
     companion object {
-        const val CHANNEL_INTERSTITIAL = "${CHANNEL_MAIN}/interstitialAd"
+        const val CHANNEL_REWARDED = "${CHANNEL_MAIN}/rewardedAd"
     }
 }
