@@ -29,7 +29,7 @@ class BannerAdView(context: Context, viewId: Int, args: Map<*, *>, messenger: Bi
 
     private val adUnitId = args["adUnitId"] as String
 
-    private val autoRefreshTime = args["autoRefreshTime"] as? Long ?: 0L
+    private val autoRefreshTime = args["autoRefreshTime"] as? Int
 
     private val bannerAd: BannerAd
 
@@ -38,10 +38,11 @@ class BannerAdView(context: Context, viewId: Int, args: Map<*, *>, messenger: Bi
 
     init {
         bannerAd = BannerAd(context).also {
-            it.autoRefreshTime = autoRefreshTime
             it.adSize          = adSize
             it.adUnitId        = adUnitId
             it.listener        = this
+
+            autoRefreshTime?.apply { it.autoRefreshTime = toLong() }
 
             it.loadAd()
         }
