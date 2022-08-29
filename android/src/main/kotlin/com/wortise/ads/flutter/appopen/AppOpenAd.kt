@@ -1,0 +1,211 @@
+package com.wortise.ads.flutter.appopen
+
+import android.app.Activity
+import android.content.Context
+import com.wortise.ads.AdError
+import com.wortise.ads.appopen.AppOpenAd
+import com.wortise.ads.flutter.WortiseFlutterPlugin.Companion.CHANNEL_MAIN
+import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+import io.flutter.plugin.common.MethodCall
+import io.flutter.plugin.common.MethodChannel
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler
+import io.flutter.plugin.common.MethodChannel.Result
+
+class AppOpenAd : ActivityAware, FlutterPlugin, MethodCallHandler {
+
+    private var activity: Activity? = null
+
+    private lateinit var binding: FlutterPlugin.FlutterPluginBinding
+
+    private lateinit var channel : MethodChannel
+
+    private lateinit var context: Context
+
+    private val instances = mutableMapOf<String, AppOpenAd>()
+
+
+    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        activity = binding.activity
+    }
+
+    override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        this.binding = binding
+
+        context = binding.applicationContext
+
+        channel = MethodChannel(binding.binaryMessenger, CHANNEL_APP_OPEN)
+        channel.setMethodCallHandler(this)
+    }
+
+    override fun onDetachedFromActivity() {
+        activity = null
+    }
+
+    override fun onDetachedFromActivityForConfigChanges() {
+        activity = null
+    }
+
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        channel.setMethodCallHandler(null)
+    }
+
+    override fun onMethodCall(call: MethodCall, result: Result) {
+        when (call.method) {
+
+            "destroy"     -> destroy(call, result)
+
+            "isAvailable" -> isAvailable(call, result)
+
+            "isDestroyed" -> isDestroyed(call, result)
+
+            "isShowing"   -> isShowing(call, result)
+
+            "loadAd"      -> loadAd(call, result)
+
+            "showAd"      -> showAd(call, result)
+
+            "tryToShowAd" -> tryToShowAd(call, result)
+
+            else          -> result.notImplemented()
+        }
+    }
+
+    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+        activity = binding.activity
+    }
+
+
+    private fun createInstance(adUnitId: String): AppOpenAd {
+        val activity = requireNotNull(activity)
+
+        val adChannel = MethodChannel(binding.binaryMessenger, "${CHANNEL_APP_OPEN}_$adUnitId")
+
+        return AppOpenAd(activity, adUnitId).also {
+
+            it.listener = AppOpenAdListener(adChannel)
+
+            instances[adUnitId] = it
+        }
+    }
+
+    private fun destroy(call: MethodCall, result: Result) {
+        val adUnitId = call.argument<String>("adUnitId")
+
+        requireNotNull(adUnitId)
+
+        instances.remove(adUnitId)?.destroy()
+
+        result.success(null)
+    }
+
+    private fun get(adUnitId: String): AppOpenAd {
+        return instances[adUnitId] ?: createInstance(adUnitId)
+    }
+
+    private fun isAvailable(call: MethodCall, result: Result) {
+        val adUnitId = call.argument<String>("adUnitId")
+
+        requireNotNull(adUnitId)
+
+        result.success(instances[adUnitId]?.isAvailable == true)
+    }
+
+    private fun isDestroyed(call: MethodCall, result: Result) {
+        val adUnitId = call.argument<String>("adUnitId")
+
+        requireNotNull(adUnitId)
+
+        result.success(instances[adUnitId]?.isDestroyed == true)
+    }
+
+    private fun isShowing(call: MethodCall, result: Result) {
+        val adUnitId = call.argument<String>("adUnitId")
+
+        requireNotNull(adUnitId)
+
+        result.success(instances[adUnitId]?.isShowing == true)
+    }
+
+    private fun loadAd(call: MethodCall, result: Result) {
+        val adUnitId    = call.argument<String> ("adUnitId")
+        val autoReload  = call.argument<Boolean>("autoReload")
+        val orientation = call.argument<String> ("orientation")
+
+        requireNotNull(adUnitId)
+
+        get(adUnitId).also {
+
+            autoReload?.apply { it.autoReload = this }
+
+            orientation?.apply { it.orientation = AppOpenAd.Orientation.valueOf(this) }
+
+            it.loadAd()
+        }
+
+        result.success(null)
+    }
+
+    private fun showAd(call: MethodCall, result: Result) {
+        val activity = requireNotNull(activity)
+
+        val adUnitId = call.argument<String>("adUnitId")
+
+        requireNotNull(adUnitId)
+
+        val appOpenAd = instances[adUnitId]
+
+        if (appOpenAd?.isAvailable != true) {
+            result.success(false)
+            return
+        }
+
+        appOpenAd.showAd(activity)
+
+        result.success(true)
+    }
+
+    private fun tryToShowAd(call: MethodCall, result: Result) {
+        val activity = requireNotNull(activity)
+
+        val adUnitId = call.argument<String>("adUnitId")
+
+        requireNotNull(adUnitId)
+
+        val shown = instances[adUnitId]?.tryToShowAd(activity) == true
+
+        result.success(shown)
+    }
+
+
+    private class AppOpenAdListener(private val channel: MethodChannel) : AppOpenAd.Listener {
+
+        override fun onAppOpenClicked(ad: AppOpenAd) {
+            channel.invokeMethod("clicked", null)
+        }
+
+        override fun onAppOpenDismissed(ad: AppOpenAd) {
+            channel.invokeMethod("dismissed", null)
+        }
+
+        override fun onAppOpenFailed(ad: AppOpenAd, error: AdError) {
+            val values = mapOf("error" to error.name)
+
+            channel.invokeMethod("failed", values)
+        }
+
+        override fun onAppOpenLoaded(ad: AppOpenAd) {
+            channel.invokeMethod("loaded", null)
+        }
+
+        override fun onAppOpenShown(ad: AppOpenAd) {
+            channel.invokeMethod("shown", null)
+        }
+    }
+
+
+    companion object {
+        const val CHANNEL_APP_OPEN = "${CHANNEL_MAIN}/appOpenAd"
+    }
+}
