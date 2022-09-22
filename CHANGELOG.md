@@ -1,3 +1,8 @@
+## 1.3.2+5
+
+* Added support for native ads
+* Many improvements and fixes
+
 ## 1.3.2+4
 
 * Added missing changes from the previous version
