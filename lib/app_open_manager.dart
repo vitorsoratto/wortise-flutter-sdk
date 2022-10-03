@@ -12,7 +12,7 @@ class AppOpenManager extends WidgetsBindingObserver {
   AppOpenManager(this.appOpenAd);
 
   AppOpenManager.register(this.appOpenAd) {
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
 
