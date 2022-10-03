@@ -12,6 +12,7 @@ class DataManager {
   static const MethodChannel _channel =
       const MethodChannel(CHANNEL_DATA_MANAGER);
 
+
   static Future<int?> get age async {
     return await _channel.invokeMethod('getAge');
   }
@@ -31,6 +32,7 @@ class DataManager {
 
     return UserGender.values.firstWhere((g) => describeEnum(g) == gender);
   }
+
 
   static Future<void> addEmail(String email) async {
     Map<String, dynamic> values = {'email': email};

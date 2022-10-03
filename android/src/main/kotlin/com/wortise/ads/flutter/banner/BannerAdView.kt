@@ -11,22 +11,6 @@ import io.flutter.plugin.platform.PlatformView
 
 class BannerAdView(context: Context, viewId: Int, args: Map<*, *>, messenger: BinaryMessenger) : BannerAd.Listener, PlatformView {
 
-    private val adHeight = args["adHeight"] as? Int ?: -1
-
-    private val adSize: AdSize
-        get() = when {
-
-            (adHeight >= 280) -> AdSize.HEIGHT_280
-
-            (adHeight >= 250) -> AdSize.HEIGHT_250
-
-            (adHeight >= 90)  -> AdSize.HEIGHT_90
-
-            (adHeight >= 50)  -> AdSize.HEIGHT_50
-
-            else -> AdSize.MATCH_VIEW
-        }
-
     private val adUnitId = args["adUnitId"] as String
 
     private val autoRefreshTime = args["autoRefreshTime"] as? Int
@@ -38,9 +22,9 @@ class BannerAdView(context: Context, viewId: Int, args: Map<*, *>, messenger: Bi
 
     init {
         bannerAd = BannerAd(context).also {
-            it.adSize          = adSize
-            it.adUnitId        = adUnitId
-            it.listener        = this
+            it.adSize   = getAdSize(args)
+            it.adUnitId = adUnitId
+            it.listener = this
 
             autoRefreshTime?.apply { it.autoRefreshTime = toLong() }
 
@@ -60,7 +44,9 @@ class BannerAdView(context: Context, viewId: Int, args: Map<*, *>, messenger: Bi
     }
 
     override fun onBannerFailed(ad: BannerAd, error: AdError) {
-        val values = mapOf("error" to error.name)
+        val values = mapOf(
+            "error" to error.name
+        )
 
         channel.invokeMethod("failed", values)
     }
@@ -72,5 +58,23 @@ class BannerAdView(context: Context, viewId: Int, args: Map<*, *>, messenger: Bi
         )
 
         channel.invokeMethod("loaded", values)
+    }
+
+
+    private fun getAdSize(args: Map<*, *>): AdSize {
+        val params = args["adSize"] as Map<String, *>
+
+        val height = params["height"] as Int
+        val type   = params["type"]   as String
+        val width  = params["width"]  as Int
+
+        return when (type) {
+
+            "anchored" -> AdSize.getAnchoredAdaptiveBannerAdSize(context, width)
+
+            "inline"   -> AdSize.getInlineAdaptiveBannerAdSize(context, width, height)
+
+            else       -> AdSize(width = width, height = height)
+        }
     }
 }

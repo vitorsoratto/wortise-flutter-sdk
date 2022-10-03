@@ -53,7 +53,7 @@ class _BannerAdState extends State<BannerAd> with AutomaticKeepAliveClientMixin 
     }
 
     var params = <String, dynamic>{
-      "adHeight": widget.adSize.height,
+      "adSize": widget.adSize.toMap,
       "adUnitId": widget.adUnitId,
       "autoRefreshTime": widget.autoRefreshTime
     };
