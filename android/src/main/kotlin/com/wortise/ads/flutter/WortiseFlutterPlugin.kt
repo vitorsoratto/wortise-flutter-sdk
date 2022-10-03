@@ -3,6 +3,7 @@ package com.wortise.ads.flutter
 import android.content.Context
 import com.wortise.ads.WortiseSdk
 import com.wortise.ads.flutter.AdWidget.Companion.CHANNEL_AD_WIDGET
+import com.wortise.ads.flutter.appopen.AppOpenAd
 import com.wortise.ads.flutter.banner.BannerAd
 import com.wortise.ads.flutter.banner.BannerAd.Companion.CHANNEL_BANNER
 import com.wortise.ads.flutter.interstitial.InterstitialAd
@@ -23,6 +24,7 @@ class WortiseFlutterPlugin : ActivityAware, FlutterPlugin, MethodCallHandler {
 
     private val plugins = listOf<FlutterPlugin>(
         AdSettings           (),
+        AppOpenAd            (),
         ConsentManager       (),
         DataManager          (),
         GoogleNativeAdManager(),
