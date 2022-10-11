@@ -31,23 +31,21 @@ class DataManager : FlutterPlugin, MethodCallHandler {
     override fun onMethodCall(call: MethodCall, result: Result) {
         when (call.method) {
 
-            "addEmail"       -> addEmail(call, result)
+            "addEmail"  -> addEmail(call, result)
 
-            "getAge"         -> result.success(DataManager.getAge(context))
+            "getAge"    -> result.success(DataManager.getAge(context))
 
-            "getEmails"      -> result.success(DataManager.getEmails(context))
+            "getEmails" -> result.success(DataManager.getEmails(context))
 
-            "getGender"      -> getGender(call, result)
+            "getGender" -> getGender(call, result)
 
-            "requestAccount" -> requestAccount(call, result)
+            "setAge"    -> setAge(call, result)
 
-            "setAge"         -> setAge(call, result)
+            "setEmails" -> setEmails(call, result)
 
-            "setEmails"      -> setEmails(call, result)
+            "setGender" -> setGender(call, result)
 
-            "setGender"      -> setGender(call, result)
-
-            else             -> result.notImplemented()
+            else        -> result.notImplemented()
         }
     }
 
@@ -68,14 +66,6 @@ class DataManager : FlutterPlugin, MethodCallHandler {
             ?.toLowerCase()
 
         result.success(gender)
-    }
-
-    private fun requestAccount(call: MethodCall, result: Result) {
-        val onlyIfNotAvailable = call.argument<Boolean>("email") ?: true
-
-        val res = DataManager.requestAccount(context, onlyIfNotAvailable)
-
-        result.success(res)
     }
 
     private fun setAge(call: MethodCall, result: Result) {

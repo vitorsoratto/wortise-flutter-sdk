@@ -30,6 +30,10 @@ class AdSettings {
     return AdContentRating.values.firstWhere((r) => describeEnum(r) == rating);
   }
 
+  static Future<String?> get userId async {
+    return await _channel.invokeMethod('getUserId');
+  }
+
   static Future<void> setChildDirected(bool enabled) async {
     Map<String, dynamic> values = {'enabled': enabled};
 
@@ -42,5 +46,11 @@ class AdSettings {
     Map<String, dynamic> values = {'rating': name};
 
     await _channel.invokeMethod('setMaxAdContentRating', values);
+  }
+
+  static Future<void> setUserId(String? userId) async {
+    Map<String, dynamic> values = {'userId': userId};
+
+    await _channel.invokeMethod('setUserId', values);
   }
 }

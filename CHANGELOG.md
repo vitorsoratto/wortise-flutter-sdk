@@ -1,3 +1,9 @@
+## 1.4.0
+
+* Wortise SDK updated to version 1.4.0
+* Added support for app open ads
+* Many improvements and fixes
+
 ## 1.3.2+5
 
 * Added support for native ads

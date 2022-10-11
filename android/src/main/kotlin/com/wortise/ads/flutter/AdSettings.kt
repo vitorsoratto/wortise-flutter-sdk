@@ -35,11 +35,15 @@ class AdSettings : FlutterPlugin, MethodCallHandler {
 
             "getMaxAdContentRating" -> getMaxAdContentRating(call, result)
 
+            "getUserId"             -> result.success(AdSettings.getUserId(context))
+
             "isChildDirected"       -> result.success(AdSettings.isChildDirected(context))
 
             "setChildDirected"      -> setChildDirected(call, result)
 
             "setMaxAdContentRating" -> setMaxAdContentRating(call, result)
+
+            "setUserId"             -> setUserId(call, result)
 
             else                    -> result.notImplemented()
         }
@@ -70,6 +74,14 @@ class AdSettings : FlutterPlugin, MethodCallHandler {
         val rating = name?.toUpperCase()?.let { AdContentRating.valueOf(it) }
 
         AdSettings.setMaxAdContentRating(context, rating)
+
+        result.success(null)
+    }
+
+    private fun setUserId(call: MethodCall, result: Result) {
+        val userId = call.argument<String>("userId")
+
+        AdSettings.setUserId(context, userId)
 
         result.success(null)
     }

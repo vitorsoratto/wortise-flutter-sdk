@@ -9,7 +9,7 @@ import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
 
-class BannerAdView(context: Context, viewId: Int, args: Map<*, *>, messenger: BinaryMessenger) : BannerAd.Listener, PlatformView {
+class BannerAdView(private val context: Context, viewId: Int, args: Map<*, *>, messenger: BinaryMessenger) : BannerAd.Listener, PlatformView {
 
     private val adUnitId = args["adUnitId"] as String
 
