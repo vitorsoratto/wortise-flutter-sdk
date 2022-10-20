@@ -1,3 +1,7 @@
+## 1.4.1
+
+* Wortise SDK updated to version 1.4.1
+
 ## 1.4.0
 
 * Wortise SDK updated to version 1.4.0
