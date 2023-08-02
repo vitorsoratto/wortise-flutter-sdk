@@ -40,12 +40,6 @@ class DataManager {
     await _channel.invokeMethod('addEmail', values);
   }
 
-  static Future<bool> requestAccount(bool onlyIfNotAvailable) async {
-    Map<String, dynamic> values = {'onlyIfNotAvailable': onlyIfNotAvailable};
-
-    return await _channel.invokeMethod('requestAccount', values);
-  }
-
   static Future<void> setAge(int age) async {
     Map<String, dynamic> values = {'age': age};
 
