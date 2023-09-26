@@ -80,10 +80,6 @@ class WortiseFlutterPlugin : ActivityAware, FlutterPlugin, MethodCallHandler {
 
             "isReady"       -> result.success(WortiseSdk.isReady)
 
-            "start"         -> start(result)
-
-            "stop"          -> stop(result)
-
             "wait"          -> wait(result)
 
             else            -> result.notImplemented()
@@ -96,26 +92,13 @@ class WortiseFlutterPlugin : ActivityAware, FlutterPlugin, MethodCallHandler {
 
 
     private fun initialize(call: MethodCall, result: Result) {
-        val assetKey = call.argument<String> ("assetKey")
-        val start    = call.argument<Boolean>("start") ?: true
+        val assetKey = call.argument<String>("assetKey")
 
         require(!assetKey.isNullOrEmpty())
 
-        WortiseSdk.initialize(context, assetKey, start) {
+        WortiseSdk.initialize(context, assetKey) {
             result.success(null)
         }
-    }
-
-    private fun start(result: Result) {
-        WortiseSdk.start(context)
-
-        result.success(null)
-    }
-
-    private fun stop(result: Result) {
-        WortiseSdk.stop(context)
-
-        result.success(null)
     }
 
     private fun wait(result: Result) {

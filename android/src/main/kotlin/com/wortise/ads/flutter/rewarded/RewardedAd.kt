@@ -163,10 +163,20 @@ class RewardedAd : ActivityAware, FlutterPlugin, MethodCallHandler {
             channel.invokeMethod("dismissed", null)
         }
 
-        override fun onRewardedFailed(ad: RewardedAd, error: AdError) {
+        override fun onRewardedFailedToLoad(ad: RewardedAd, error: AdError) {
             val values = mapOf("error" to error.name)
 
-            channel.invokeMethod("failed", values)
+            channel.invokeMethod("failedToLoad", values)
+        }
+
+        override fun onRewardedFailedToShow(ad: RewardedAd, error: AdError) {
+            val values = mapOf("error" to error.name)
+
+            channel.invokeMethod("failedToShow", values)
+        }
+
+        override fun onRewardedImpression(ad: RewardedAd) {
+            channel.invokeMethod("impression", null)
         }
 
         override fun onRewardedLoaded(ad: RewardedAd) {

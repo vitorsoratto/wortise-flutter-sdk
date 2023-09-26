@@ -8,7 +8,8 @@ import 'wortise_sdk.dart';
 
 enum BannerAdEvent {
   CLICKED,
-  FAILED,
+  FAILED_TO_LOAD,
+  IMPRESSION,
   LOADED,
 }
 
@@ -43,11 +44,20 @@ class BannerAd extends StatefulWidget {
 
 class _BannerAdState extends State<BannerAd> with AutomaticKeepAliveClientMixin {
 
-  var containerHeight = 0.5;
+  double? containerHeight;
 
 
   @override
+  void initState() {
+    super.initState();
+
+    _updateState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     if (!Platform.isAndroid) {
       return Container();
     }
@@ -76,6 +86,22 @@ class _BannerAdState extends State<BannerAd> with AutomaticKeepAliveClientMixin 
   bool get wantKeepAlive => widget.keepAlive;
 
 
+  void _updateState({ int? adHeight }) {
+    var height = adHeight;
+
+    if (height == null || height <= 0) {
+      height = widget.adSize.height;
+    }
+
+    if (height <= 0) {
+      height = null;
+    }
+
+    setState(() {
+      containerHeight = height?.toDouble() ?? double.infinity;
+    });
+  }
+
   void _onViewCreated(int id) {
     final channel = MethodChannel('${BannerAd.CHANNEL_BANNER}_$id');
 
@@ -85,20 +111,18 @@ class _BannerAdState extends State<BannerAd> with AutomaticKeepAliveClientMixin 
         widget.listener?.call(BannerAdEvent.CLICKED, call.arguments);
         break;
 
-      case "failed":
-        widget.listener?.call(BannerAdEvent.FAILED, call.arguments);
+      case "failedToLoad":
+        widget.listener?.call(BannerAdEvent.FAILED_TO_LOAD, call.arguments);
+        break;
+
+      case "impression":
+        widget.listener?.call(BannerAdEvent.IMPRESSION, call.arguments);
         break;
 
       case "loaded":
         var adHeight = call.arguments["adHeight"];
 
-        if (adHeight == null || adHeight <= 0) {
-          adHeight = widget.adSize.height;
-        }
-
-        setState(() {
-          containerHeight = adHeight.toDouble();
-        });
+        _updateState(adHeight: adHeight);
 
         widget.listener?.call(BannerAdEvent.LOADED, call.arguments);
         

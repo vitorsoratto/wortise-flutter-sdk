@@ -152,10 +152,20 @@ class InterstitialAd : ActivityAware, FlutterPlugin, MethodCallHandler {
             channel.invokeMethod("dismissed", null)
         }
 
-        override fun onInterstitialFailed(ad: InterstitialAd, error: AdError) {
+        override fun onInterstitialFailedToLoad(ad: InterstitialAd, error: AdError) {
             val values = mapOf("error" to error.name)
 
-            channel.invokeMethod("failed", values)
+            channel.invokeMethod("failedToLoad", values)
+        }
+
+        override fun onInterstitialFailedToShow(ad: InterstitialAd, error: AdError) {
+            val values = mapOf("error" to error.name)
+
+            channel.invokeMethod("failedToShow", values)
+        }
+
+        override fun onInterstitialImpression(ad: InterstitialAd) {
+            channel.invokeMethod("impression", null)
         }
 
         override fun onInterstitialLoaded(ad: InterstitialAd) {

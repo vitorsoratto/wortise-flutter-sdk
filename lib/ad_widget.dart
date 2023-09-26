@@ -30,6 +30,8 @@ class _AdWidgetState extends State<AdWidget> with AutomaticKeepAliveClientMixin 
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     if (!Platform.isAndroid) {
       return Container();
     }

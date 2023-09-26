@@ -7,14 +7,11 @@ import 'wortise_sdk.dart';
 enum AppOpenAdEvent {
   CLICKED,
   DISMISSED,
-  FAILED,
+  FAILED_TO_LOAD,
+  FAILED_TO_SHOW,
+  IMPRESSION,
   LOADED,
   SHOWN,
-}
-
-enum AppOpenOrientation {
-  LANDSCAPE,
-  PORTRAIT
 }
 
 class AppOpenAd {
@@ -32,10 +29,8 @@ class AppOpenAd {
 
   final void Function(AppOpenAdEvent, dynamic)? listener;
 
-  final AppOpenOrientation orientation;
 
-
-  AppOpenAd(this.adUnitId, {this.listener, this.autoReload = false, this.orientation = AppOpenOrientation.PORTRAIT}) {
+  AppOpenAd(this.adUnitId, {this.listener, this.autoReload = false}) {
     if (listener != null) {
       _adChannel = MethodChannel('${CHANNEL_APP_OPEN}_$adUnitId');
       _adChannel?.setMethodCallHandler(_handleEvent);
@@ -77,8 +72,7 @@ class AppOpenAd {
   Future<void> loadAd() async {
     Map<String, dynamic> values = {
       'adUnitId': adUnitId,
-      'autoReload': autoReload,
-      'orientation': orientation.name
+      'autoReload': autoReload
     };
 
     await _channel.invokeMethod('loadAd', values);
@@ -111,8 +105,16 @@ class AppOpenAd {
       listener?.call(AppOpenAdEvent.DISMISSED, call.arguments);
       break;
 
-    case "failed":
-      listener?.call(AppOpenAdEvent.FAILED, call.arguments);
+    case "failedToLoad":
+      listener?.call(AppOpenAdEvent.FAILED_TO_LOAD, call.arguments);
+      break;
+
+    case "failedToShow":
+      listener?.call(AppOpenAdEvent.FAILED_TO_SHOW, call.arguments);
+      break;
+
+    case "impression":
+      listener?.call(AppOpenAdEvent.IMPRESSION, call.arguments);
       break;
 
     case "loaded":

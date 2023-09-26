@@ -20,6 +20,10 @@ class AdSettings {
     return await _channel.invokeMethod('isChildDirected');
   }
 
+  static Future<bool> get isTestEnabled async {
+    return await _channel.invokeMethod('isTestEnabled');
+  }
+
   static Future<AdContentRating?> get maxAdContentRating async {
     String? rating = await _channel.invokeMethod('getMaxAdContentRating');
 
@@ -46,6 +50,12 @@ class AdSettings {
     Map<String, dynamic> values = {'rating': name};
 
     await _channel.invokeMethod('setMaxAdContentRating', values);
+  }
+
+  static Future<void> setTestEnabled(bool enabled) async {
+    Map<String, dynamic> values = {'enabled': enabled};
+
+    await _channel.invokeMethod('setTestEnabled', values);
   }
 
   static Future<void> setUserId(String? userId) async {

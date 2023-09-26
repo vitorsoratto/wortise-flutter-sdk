@@ -39,9 +39,13 @@ class AdSettings : FlutterPlugin, MethodCallHandler {
 
             "isChildDirected"       -> result.success(AdSettings.isChildDirected(context))
 
+            "isTestEnabled"         -> result.success(AdSettings.testEnabled)
+
             "setChildDirected"      -> setChildDirected(call, result)
 
             "setMaxAdContentRating" -> setMaxAdContentRating(call, result)
+
+            "setTestEnabled"        -> setTestEnabled(call, result)
 
             "setUserId"             -> setUserId(call, result)
 
@@ -74,6 +78,16 @@ class AdSettings : FlutterPlugin, MethodCallHandler {
         val rating = name?.toUpperCase()?.let { AdContentRating.valueOf(it) }
 
         AdSettings.setMaxAdContentRating(context, rating)
+
+        result.success(null)
+    }
+
+    private fun setTestEnabled(call: MethodCall, result: Result) {
+        val enabled = requireNotNull(
+            call.argument<Boolean>("enabled")
+        )
+
+        AdSettings.testEnabled = enabled
 
         result.success(null)
     }

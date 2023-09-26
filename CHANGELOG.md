@@ -1,3 +1,9 @@
+## 1.5.0
+
+* Wortise SDK updated to version 1.5.0
+* Fixed issues with banner ads rendering
+* Many improvements and fixes
+
 ## 1.4.1
 
 * Wortise SDK updated to version 1.4.1

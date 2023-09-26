@@ -7,7 +7,9 @@ import 'wortise_sdk.dart';
 enum InterstitialAdEvent {
   CLICKED,
   DISMISSED,
-  FAILED,
+  FAILED_TO_LOAD,
+  FAILED_TO_SHOW,
+  IMPRESSION,
   LOADED,
   SHOWN,
 }
@@ -91,8 +93,16 @@ class InterstitialAd {
 
       break;
 
-    case "failed":
-      listener?.call(InterstitialAdEvent.FAILED, call.arguments);
+    case "failedToLoad":
+      listener?.call(InterstitialAdEvent.FAILED_TO_LOAD, call.arguments);
+      break;
+
+    case "failedToShow":
+      listener?.call(InterstitialAdEvent.FAILED_TO_SHOW, call.arguments);
+      break;
+
+    case "impression":
+      listener?.call(InterstitialAdEvent.IMPRESSION, call.arguments);
       break;
 
     case "loaded":

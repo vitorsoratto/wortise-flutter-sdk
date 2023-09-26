@@ -131,15 +131,12 @@ class AppOpenAd : ActivityAware, FlutterPlugin, MethodCallHandler {
     private fun loadAd(call: MethodCall, result: Result) {
         val adUnitId    = call.argument<String> ("adUnitId")
         val autoReload  = call.argument<Boolean>("autoReload")
-        val orientation = call.argument<String> ("orientation")
 
         requireNotNull(adUnitId)
 
         get(adUnitId).also {
 
             autoReload?.apply { it.autoReload = this }
-
-            orientation?.apply { it.orientation = AppOpenAd.Orientation.valueOf(this) }
 
             it.loadAd()
         }
@@ -173,9 +170,16 @@ class AppOpenAd : ActivityAware, FlutterPlugin, MethodCallHandler {
 
         requireNotNull(adUnitId)
 
-        val shown = instances[adUnitId]?.tryToShowAd(activity) == true
+        val instance = instances[adUnitId]
 
-        result.success(shown)
+        if (instance == null) {
+            result.success(false)
+            return
+        }
+
+        instance.tryToShowAd(activity)
+
+        result.success(true)
     }
 
 
@@ -189,10 +193,20 @@ class AppOpenAd : ActivityAware, FlutterPlugin, MethodCallHandler {
             channel.invokeMethod("dismissed", null)
         }
 
-        override fun onAppOpenFailed(ad: AppOpenAd, error: AdError) {
+        override fun onAppOpenFailedToLoad(ad: AppOpenAd, error: AdError) {
             val values = mapOf("error" to error.name)
 
-            channel.invokeMethod("failed", values)
+            channel.invokeMethod("failedToLoad", values)
+        }
+
+        override fun onAppOpenFailedToShow(ad: AppOpenAd, error: AdError) {
+            val values = mapOf("error" to error.name)
+
+            channel.invokeMethod("failedToShow", values)
+        }
+
+        override fun onAppOpenImpression(ad: AppOpenAd) {
+            channel.invokeMethod("impression", null)
         }
 
         override fun onAppOpenLoaded(ad: AppOpenAd) {

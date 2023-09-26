@@ -2,7 +2,6 @@ package com.wortise.ads.flutter
 
 import android.app.Activity
 import android.content.Context
-import com.wortise.ads.consent.ConsentActivity
 import com.wortise.ads.consent.ConsentManager
 import com.wortise.ads.flutter.WortiseFlutterPlugin.Companion.CHANNEL_MAIN
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -48,21 +47,17 @@ class ConsentManager : ActivityAware, FlutterPlugin, MethodCallHandler {
     override fun onMethodCall(call: MethodCall, result: Result) {
         when (call.method) {
 
-            "canCollectData" -> result.success(ConsentManager.canCollectData(context))
+            "canCollectData"            -> result.success(ConsentManager.canCollectData(context))
 
-            "isGranted"      -> result.success(ConsentManager.isGranted(context))
+            "canRequestPersonalizedAds" -> result.success(ConsentManager.canRequestPersonalizedAds(context))
 
-            "isReplied"      -> result.success(ConsentManager.isReplied(context))
+            "exists"                    -> result.success(ConsentManager.exists(context))
 
-            "request"        -> request(call, result)
+            "request"                   -> request(call, result)
 
-            "requestOnce"    -> requestOnce(call, result)
+            "requestIfRequired"         -> requestIfRequired(call, result)
 
-            "set"            -> set(call, result)
-
-            "setIabString"   -> setIabString(call, result)
-
-            else             -> result.notImplemented()
+            else                        -> result.notImplemented()
         }
     }
 
@@ -74,37 +69,17 @@ class ConsentManager : ActivityAware, FlutterPlugin, MethodCallHandler {
     private fun request(call: MethodCall, result: Result) {
         val activity = requireNotNull(activity)
 
-        val withOptOut = call.argument<Boolean>("withOptOut") ?: false
-
-        result.success(ConsentActivity.request(activity, withOptOut))
+        ConsentManager.request(activity) {
+            result.success(it)
+        }
     }
 
-    private fun requestOnce(call: MethodCall, result: Result) {
+    private fun requestIfRequired(call: MethodCall, result: Result) {
         val activity = requireNotNull(activity)
 
-        val withOptOut = call.argument<Boolean>("withOptOut") ?: false
-
-        result.success(ConsentActivity.requestOnce(activity, withOptOut))
-    }
-
-    private fun set(call: MethodCall, result: Result) {
-        val granted = call.argument<Boolean>("granted")
-
-        requireNotNull(granted)
-
-        ConsentManager.set(context, granted)
-
-        result.success(null)
-    }
-
-    private fun setIabString(call: MethodCall, result: Result) {
-        val value = call.argument<String>("value")
-
-        requireNotNull(value)
-
-        ConsentManager.setIabString(context, value)
-
-        result.success(null)
+        ConsentManager.requestIfRequired(activity) {
+            result.success(it)
+        }
     }
 
 

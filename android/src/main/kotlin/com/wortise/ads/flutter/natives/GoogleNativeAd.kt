@@ -43,10 +43,10 @@ class GoogleNativeAd(
         channel.invokeMethod("clicked", null)
     }
 
-    override fun onNativeFailed(ad: GoogleNativeAd, error: AdError) {
+    override fun onNativeFailedToLoad(ad: GoogleNativeAd, error: AdError) {
         val values = mapOf("error" to error.name)
 
-        channel.invokeMethod("dismissed", values)
+        channel.invokeMethod("failedToLoad", values)
     }
 
     override fun onNativeImpression(ad: GoogleNativeAd) {

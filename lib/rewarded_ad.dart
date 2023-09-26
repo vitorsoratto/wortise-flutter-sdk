@@ -8,7 +8,9 @@ enum RewardedAdEvent {
   CLICKED,
   COMPLETED,
   DISMISSED,
-  FAILED,
+  FAILED_TO_LOAD,
+  FAILED_TO_SHOW,
+  IMPRESSION,
   LOADED,
   SHOWN,
 }
@@ -96,8 +98,16 @@ class RewardedAd {
 
       break;
 
-    case "failed":
-      listener?.call(RewardedAdEvent.FAILED, call.arguments);
+    case "failedToLoad":
+      listener?.call(RewardedAdEvent.FAILED_TO_LOAD, call.arguments);
+      break;
+
+    case "failedToShow":
+      listener?.call(RewardedAdEvent.FAILED_TO_SHOW, call.arguments);
+      break;
+
+    case "impression":
+      listener?.call(RewardedAdEvent.IMPRESSION, call.arguments);
       break;
 
     case "loaded":

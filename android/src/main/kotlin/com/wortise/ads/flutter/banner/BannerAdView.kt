@@ -43,12 +43,14 @@ class BannerAdView(private val context: Context, viewId: Int, args: Map<*, *>, m
         channel.invokeMethod("clicked", null)
     }
 
-    override fun onBannerFailed(ad: BannerAd, error: AdError) {
-        val values = mapOf(
-            "error" to error.name
-        )
+    override fun onBannerFailedToLoad(ad: BannerAd, error: AdError) {
+        val values = mapOf("error" to error.name)
 
-        channel.invokeMethod("failed", values)
+        channel.invokeMethod("failedToLoad", values)
+    }
+
+    override fun onBannerImpression(ad: BannerAd) {
+        channel.invokeMethod("impression", null)
     }
 
     override fun onBannerLoaded(ad: BannerAd) {
