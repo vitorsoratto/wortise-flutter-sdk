@@ -1,5 +1,5 @@
 group 'com.wortise.ads.flutter'
-version '1.5.0'
+version '1.5.1'
 
 buildscript {
     ext.kotlin_version = '1.5.30'
@@ -23,7 +23,6 @@ rootProject.allprojects {
         maven { url 'https://maven.wortise.com/artifactory/public' }
         maven { url 'https://android-sdk.is.com/' }
         maven { url 'https://artifact.bytedance.com/repository/pangle' }
-        maven { url 'https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea' }
     }
 }
 
@@ -47,6 +46,6 @@ android {
 }
 
 dependencies {
-    api 'com.wortise:android-sdk:1.5.0'
+    api 'com.wortise:android-sdk:1.5.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
